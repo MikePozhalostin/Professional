@@ -32,20 +32,22 @@ CREATE TABLE IF NOT EXISTS shop."OrderDetails"(
 "TotalCoast" float NOT NULL
 );
 
+ALTER TABLE shop."Orders" DROP CONSTRAINT IF EXISTS fk_order_user;
 ALTER TABLE shop."Orders"
     ADD CONSTRAINT fk_order_user
 	FOREIGN KEY ("UserID")
 	REFERENCES shop."Users" ("UserID");
 
+ALTER TABLE shop."OrderDetails" DROP CONSTRAINT IF EXISTS fk_orderdetails_order;
 ALTER TABLE shop."OrderDetails"
     ADD CONSTRAINT fk_orderdetails_order
 	FOREIGN KEY ("OrderID")
 	REFERENCES shop."Orders" ("OrderID");
 
+ALTER TABLE shop."OrderDetails" DROP CONSTRAINT IF EXISTS fk_orderdetails_product;
 ALTER TABLE shop."OrderDetails"
     ADD CONSTRAINT fk_orderdetails_product
 	FOREIGN KEY ("ProductID")
 	REFERENCES shop."Products" ("ProductID");
 
 COMMIT;
-
