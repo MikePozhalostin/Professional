@@ -64,7 +64,7 @@ namespace ParallelReadFiles
             }
         }
 
-        private async static Task<KeyValuePair<string, int>> ReadWhiteSpacesFromFileAsync(string filePath, CancellationToken cancellationToken)
+        internal async static Task<KeyValuePair<string, int>> ReadWhiteSpacesFromFileAsync(string filePath, CancellationToken cancellationToken)
         {
             return await Task.Run(() =>
             {
