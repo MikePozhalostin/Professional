@@ -1,0 +1,15 @@
+Cores: 16, OS: Microsoft Windows NT 10.0.26200.0
+Size: 100000
+Sequential Sum: 5000050000, time: 0ms
+Threads Sum: 5000050000, time: 97ms
+PLINQ Sum: 5000050000, time: 172ms
+
+Size: 1000000
+Sequential Sum: 500000500000, time: 173ms
+Threads Sum: 500000500000, time: 254ms
+PLINQ Sum: 500000500000, time: 287ms
+
+Size: 10000000
+Sequential Sum: 50000005000000, time: 295ms
+Threads Sum: 50000005000000, time: 377ms
+PLINQ Sum: 50000005000000, time: 499ms
