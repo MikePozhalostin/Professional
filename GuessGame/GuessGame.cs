@@ -1,60 +1,53 @@
-﻿using GuessGame.Interfaces;
+using GuessNumber.Interfaces;
+using GuessNumber.Settings;
 
 namespace GuessGame
 {
-    internal class GuessGame : IGame
+    public class GuessGame
     {
-        public int NumberOfAttempts { get; set; } = 1;
-        public int FromNumber { get; set; } = 0;
-        public int ToNumber { get; set; } = 10;
+        private readonly INumberGenerator _generator;
+        private readonly INumberComparer _comparer;
+        private readonly IUserInput _input;
+        private readonly IUserOutput _output;
+        private readonly GameSettings _settings;
 
-        public void Play()
+        public GuessGame(
+            INumberGenerator generator,
+            INumberComparer comparer,
+            IUserInput input,
+            IUserOutput output,
+            GameSettings settings)
         {
-            Console.WriteLine("Игра началась. Для выхода введите q");
-            var generatedNumber = Generator.GenerateNumber(FromNumber, ToNumber);
+            _generator = generator;
+            _comparer = comparer;
+            _input = input;
+            _output = output;
+            _settings = settings;
+        }
 
-            var count = 0;
+        public void Run()
+        {
+            var secret = _generator.Generate(_settings.Min, _settings.Max);
 
-            var success = false;
-            while (count == NumberOfAttempts)
+            _output.Write($"Загаданное число от: {_settings.Min} до: {_settings.Max}. Количество попыток: {_settings.MaxAttempts}");
+
+            for (var attempt = 1; attempt <= _settings.MaxAttempts; attempt++)
             {
-                var enteredString = Console.ReadLine();
+                _output.Write($"Попытка {attempt}. Введите число:");
+                var userNumber = _input.ReadNumber();
 
-                if (enteredString == "q")
+                var result = _comparer.Compare(secret, userNumber);
+
+                if (result == CompareResult.Equal)
                 {
-                    Console.WriteLine("Игра закончилась.");
-                    break;
+                    _output.Write("Вы угадали число!");
+                    return;
                 }
 
-                if (GameValidator.TryValidateNumber(enteredString, out var number))
-                {
-                    if (number == generatedNumber)
-                    {
-                        Console.WriteLine($"Вы угадали. Загаданное число: {generatedNumber}");
-                        success = true;
-                        break;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Вы не угадали. Попробуйте снова");
-
-                    if (Comparer.Compare(generatedNumber, number))
-                    {
-                        Console.WriteLine("Ваше число меньше загаданного");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Ваше число больше загаданного");
-                    }
-                    count++;
-                }
+                _output.Write(result == CompareResult.Greater ? "Меньше" : "Больше");
             }
 
-            if (!success)
-            {
-               Console.WriteLine($"Загаданное число {generatedNumber}");
-            }
+            _output.Write($"Попытки закончились. Загаданное число: {secret}");
         }
     }
 }
