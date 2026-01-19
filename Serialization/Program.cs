@@ -57,7 +57,7 @@ namespace Serialization
         private static string CustomSerialize(object obj)
         {
             var fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
-            List<string> parts = new List<string>();
+            var parts = new List<string>();
             foreach (var field in fields)
             {
                 parts.Add($"{field.Name}:{field.GetValue(obj)}");
@@ -67,7 +67,7 @@ namespace Serialization
 
         private static T CustomDeserialize<T>(string data) where T : new()
         {
-            T obj = new T();
+            var obj = new T();
             var pairs = data.Split(',');
             var type = typeof(T);
             foreach (var pair in pairs)
